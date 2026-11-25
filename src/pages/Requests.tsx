@@ -146,7 +146,7 @@ export default function Requests() {
           {f.reason && <Badge color="error">Reason: {f.reason}</Badge>}
         </div>
       )}
-      <div className="surface overflow-hidden">
+      <div className="surface scroll-thin overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-neutral-50 text-left text-xs text-neutral-500">
             <tr>
@@ -172,8 +172,8 @@ export default function Requests() {
                     <Mono className="text-primary-700">{r.id}</Mono>
                     <div className="max-w-[180px] truncate font-mono text-[10.5px] text-neutral-400">{r.submissionRef}</div>
                   </td>
-                  <td className="max-w-[200px] truncate px-4 py-2.5 text-neutral-600">{pl?.name}</td>
-                  <td className="px-4 py-2.5">
+                  <td className="max-w-[150px] truncate px-4 py-2.5 text-neutral-600" title={pl?.name}>{pl?.name}</td>
+                  <td className="max-w-[190px] truncate whitespace-nowrap px-4 py-2.5" title={orgs.find((o) => o.id === r.orgId)?.name}>
                     <OrgName id={r.orgId} />
                   </td>
                   <td className="px-4 py-2.5">
@@ -189,11 +189,11 @@ export default function Requests() {
                     <DeliveryBadge delivery={deliveries.find((d) => d.requestId === r.id)} />
                   </td>
                   <td className="px-4 py-2.5 text-right tabular-nums">{r.attemptCount}</td>
-                  <td className="px-4 py-2.5 text-right tabular-nums text-neutral-600">
+                  <td className="whitespace-nowrap px-4 py-2.5 text-right tabular-nums text-neutral-600">
                     {c ? fmtGBP(c.cost) : '£0.00'}
                     {c?.unknown && <span className="ml-1 text-warning-600" title="Some calls have no rate">*</span>}
                   </td>
-                  <td className="px-4 py-2.5 text-right text-xs text-neutral-500" title={fmtDate(r.submittedAt)}>
+                  <td className="whitespace-nowrap px-4 py-2.5 text-right text-xs text-neutral-500" title={fmtDate(r.submittedAt)}>
                     {fmtAgo(r.submittedAt, now)}
                   </td>
                 </tr>

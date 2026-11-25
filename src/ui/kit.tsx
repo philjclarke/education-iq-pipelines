@@ -134,18 +134,23 @@ export function Label({ children, hint, required }: { children: ReactNode; hint?
   )
 }
 
-const CONTROL = 'w-full rounded-[6px] border border-neutral-300 bg-white px-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100 disabled:bg-neutral-50 disabled:text-neutral-500'
+const CONTROL = 'rounded-[6px] border border-neutral-300 bg-white px-2.5 text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-100 disabled:bg-neutral-50 disabled:text-neutral-500'
+
+/** Full width unless the caller sets its own width or flex sizing. */
+function width(className?: string) {
+  return /(^|\s)(w-|flex-1|min-w-)/.test(className ?? '') ? '' : 'w-full'
+}
 
 export function TextInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...props} className={cx(CONTROL, 'h-8', props.className)} />
+  return <input {...props} className={cx(CONTROL, width(props.className), 'h-8', props.className)} />
 }
 
 export function TextArea(props: React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
-  return <textarea rows={3} {...props} className={cx(CONTROL, 'py-1.5 leading-relaxed', props.className)} />
+  return <textarea rows={3} {...props} className={cx(CONTROL, width(props.className), 'py-1.5 leading-relaxed', props.className)} />
 }
 
 export function Select(props: React.SelectHTMLAttributes<HTMLSelectElement>) {
-  return <select {...props} className={cx(CONTROL, 'h-8 pr-7', props.className)} />
+  return <select {...props} className={cx(CONTROL, width(props.className), 'h-8 pr-7', props.className)} />
 }
 
 export function Toggle({ checked, onChange, label, disabled }: { checked: boolean; onChange: (v: boolean) => void; label?: ReactNode; disabled?: boolean }) {
@@ -344,7 +349,7 @@ export function fmtAgo(iso?: string, now = Date.now()): string {
   const s = Math.round((now - Date.parse(iso)) / 1000)
   const abs = Math.abs(s)
   const suffix = s >= 0 ? 'ago' : 'from now'
-  if (abs < 60) return s >= 0 ? 'just now' : `in ${abs}s`
+  if (s > -60 && s < 60) return 'just now'
   if (abs < 3600) return s >= 0 ? `${Math.round(abs / 60)} min ${suffix}` : `in ${Math.round(abs / 60)} min`
   if (abs < 86400) return s >= 0 ? `${Math.round(abs / 3600)} h ${suffix}` : `in ${Math.round(abs / 3600)} h`
   return s >= 0 ? `${Math.round(abs / 86400)} d ${suffix}` : `in ${Math.round(abs / 86400)} d`
